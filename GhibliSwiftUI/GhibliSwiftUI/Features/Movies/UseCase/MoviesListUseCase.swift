@@ -8,14 +8,17 @@
 import Foundation
 
 protocol MoviesListUseCaseProtocol {
+    func execute() async throws -> [Movie]
 }
 
 final class MoviesListUseCase: MoviesListUseCaseProtocol {
-    private let repository: MoviesListRepositoryProtocol
+    private let repository: MoviesRepositoryProtocol
 
-    init(repository: MoviesListRepositoryProtocol) {
+    init(repository: MoviesRepositoryProtocol) {
         self.repository = repository
     }
 
-    
+    func execute() async throws -> [Movie] {
+        try await repository.fetchMovies()
+    }
 }

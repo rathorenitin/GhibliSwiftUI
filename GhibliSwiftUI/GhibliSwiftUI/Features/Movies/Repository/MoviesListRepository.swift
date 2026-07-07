@@ -7,19 +7,20 @@
 
 import Foundation
 
-protocol MoviesListRepositoryProtocol {
-        
+protocol MoviesRepositoryProtocol {
+    func fetchMovies() async throws -> [Movie]
 }
 
-// MARK: - PatientRepository
-
-final class MoviesListRepository: MoviesListRepositoryProtocol {
-    
+final class MoviesListRepository: MoviesRepositoryProtocol {
     private let apiClient: ApiClientProtocol
 
-    // MARK: - initialization
     init(apiClient: ApiClientProtocol) {
         self.apiClient = apiClient
     }
-    
+
+    func fetchMovies() async throws -> [Movie] {
+        let request = FilmsRequest()
+        let dtos: [MovieDTO] = try await apiClient.executeAsync(request: request)
+        return dtos.map { $0.toDomain() }
+    }
 }

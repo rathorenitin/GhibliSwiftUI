@@ -7,11 +7,25 @@
 
 import SwiftUI
 
-struct MoviesListView: View {
+struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
+    @StateObject private var viewModel: ViewModel
+
+    init(viewModel: @autoclosure @escaping () -> ViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
+
     var body: some View {
-        VStack {
-            Text("Movies List")
+        NavigationView {
+            List(viewModel.movies) { movie in
+                VStack(alignment: .leading) {
+                    Text(movie.title).font(.headline)
+                    if let director = movie.director {
+                        Text("Director: \(director)").font(.subheadline)
+                    }
+                }
+            }
+            .navigationTitle("Movies")
+            .onAppear { viewModel.load() }
         }
-        .padding()
     }
 }
