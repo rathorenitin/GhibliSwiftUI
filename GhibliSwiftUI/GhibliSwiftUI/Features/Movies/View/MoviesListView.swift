@@ -16,16 +16,41 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.movies) { movie in
-                VStack(alignment: .leading) {
+            contentView
+                .navigationTitle("Movies")
+                .onAppear { viewModel.load() }
+        }
+    }
+
+    @ViewBuilder
+    private var contentView: some View {
+        switch viewModel.state {
+        case .loading:
+            LoadingView()
+
+        case .loaded(let movies):
+            List(movies) { movie in
+                VStack(alignment: .leading, spacing: 4) {
                     Text(movie.title).font(.headline)
                     if let director = movie.director {
-                        Text("Director: \(director)").font(.subheadline)
+                        Text("Director: \(director)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    if let description = movie.description {
+                        Text(description)
+                            .font(.caption)
+                            .lineLimit(2)
                     }
                 }
             }
-            .navigationTitle("Movies")
-            .onAppear { viewModel.load() }
+
+        case .empty(let message):
+            EmptyStateView(message: "No Movies")
+
+        case .error(let message):
+            ErrorView(message: message, retry: { viewModel.load() })
+
         }
     }
 }

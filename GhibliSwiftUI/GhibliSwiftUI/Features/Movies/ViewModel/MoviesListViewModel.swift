@@ -9,12 +9,12 @@ import Combine
 import Foundation
 
 protocol MoviesListViewModelProtocol: ObservableObject {
-    var movies: [Movie] { get }
+    var state: ViewState<[Movie]> { get }
     func load()
 }
 
 final class MoviesListViewModel: ObservableObject, MoviesListViewModelProtocol {
-    @Published private(set) var movies: [Movie] = []
+    @Published private(set) var state: ViewState<[Movie]> = .loading
 
     private let useCase: MoviesListUseCaseProtocol
     init(useCase: MoviesListUseCaseProtocol) {
@@ -23,13 +23,16 @@ final class MoviesListViewModel: ObservableObject, MoviesListViewModelProtocol {
 
     func load() {
         Task {
+            self.state = .loading
             do {
                 let result = try await useCase.execute()
-                DispatchQueue.main.async {
-                    self.movies = result
+                if result.isEmpty {
+                    self.state = .empty("No movies found")
+                } else {
+                    self.state = .loaded(result)
                 }
             } catch {
-                print("Failed to load movies: \(error)")
+                self.state = .error("Failed to load movies: \(error)")
             }
         }
     }
