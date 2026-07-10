@@ -10,8 +10,9 @@ import Foundation
 struct Movie: Identifiable, Equatable {
     let id: String
     let title: String
-    let description: String?
-    let director: String?
-    let producer: String?
-    let releaseDate: String?
+    let description: String
+    let director: String
+    let producer: String
+    let releaseDate: String
+    let image: String
 }

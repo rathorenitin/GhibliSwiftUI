@@ -10,13 +10,14 @@ import Foundation
 struct MovieDTO: Decodable {
     let id: String
     let title: String
-    let description: String?
-    let director: String?
-    let producer: String?
-    let release_date: String?
+    let description: String
+    let director: String
+    let producer: String
+    let release_date: String
+    let image: String
 
     enum CodingKeys: String, CodingKey {
-        case id, title, description, director, producer, release_date
+        case id, title, description, director, producer, release_date, image
     }
 
     func toDomain() -> Movie {
@@ -25,6 +26,7 @@ struct MovieDTO: Decodable {
               description: description,
               director: director,
               producer: producer,
-              releaseDate: release_date)
+              releaseDate: release_date,
+              image: image)
     }
 }

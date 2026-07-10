@@ -30,23 +30,11 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
 
         case .loaded(let movies):
             List(movies) { movie in
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(movie.title).font(.headline)
-                    if let director = movie.director {
-                        Text("Director: \(director)")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    if let description = movie.description {
-                        Text(description)
-                            .font(.caption)
-                            .lineLimit(2)
-                    }
-                }
+                MoviewView(model: movie)
             }
 
         case .empty(let message):
-            EmptyStateView(message: "No Movies")
+            EmptyStateView(message: message)
 
         case .error(let message):
             ErrorView(message: message, retry: { viewModel.load() })
