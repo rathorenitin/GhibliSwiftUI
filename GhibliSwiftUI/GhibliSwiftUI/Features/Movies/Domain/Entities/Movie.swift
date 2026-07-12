@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie: Identifiable, Equatable {
+struct Movie: Identifiable, Equatable, Hashable {
     let id: String
     let title: String
     let description: String
@@ -15,4 +15,5 @@ struct Movie: Identifiable, Equatable {
     let producer: String
     let releaseDate: String
     let image: String
+    let bannerImage: String
 }

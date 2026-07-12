@@ -15,9 +15,11 @@ struct MovieDTO: Decodable {
     let producer: String
     let release_date: String
     let image: String
+    let bannerImage: String
 
     enum CodingKeys: String, CodingKey {
         case id, title, description, director, producer, release_date, image
+        case bannerImage = "movie_banner"
     }
 
     func toDomain() -> Movie {
@@ -27,6 +29,7 @@ struct MovieDTO: Decodable {
               director: director,
               producer: producer,
               releaseDate: release_date,
-              image: image)
+              image: image,
+              bannerImage: bannerImage)
     }
 }

@@ -16,6 +16,19 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
     }
     
     var body: some View {
-        
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                
+                //1 banner image
+                ImageView(urlPath: viewModel.movie.bannerImage)
+                    .frame(height: 250)
+                
+                
+                // 2 title
+                Text(viewModel.movie.title)
+                    .font(.title)
+                    .fontWeight(.bold)
+            }
+        }
     }
 }

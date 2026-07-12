@@ -15,10 +15,13 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             contentView
                 .navigationTitle("Movies")
                 .onAppear { viewModel.load() }
+                .navigationDestination(for: Movie.self) { movie in
+                    AppCoordinator().movieDetail(movie: movie)
+                }
         }
     }
 
@@ -30,7 +33,9 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
 
         case .loaded(let movies):
             List(movies) { movie in
-                MoviewView(model: movie)
+                NavigationLink(value: movie) {
+                    MoviewView(model: movie)
+                }
             }
 
         case .empty(let message):
@@ -38,7 +43,6 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
 
         case .error(let message):
             ErrorView(message: message, retry: { viewModel.load() })
-
         }
     }
 }

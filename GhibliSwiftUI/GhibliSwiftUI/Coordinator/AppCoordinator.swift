@@ -23,4 +23,14 @@ final class AppCoordinator: ObservableObject, Coordinator {
 
         return AnyView(MoviesListView(viewModel: viewModel))
     }
+
+
+    func movieDetail(movie: Movie) -> AnyView {
+        let apiClient = ApiClient()
+        let repository = MoviesDetailRepository(apiClient: apiClient)
+        let useCase = MoviesDetailUseCase(repository: repository)
+        let viewModel = MoviesDetailViewModel(movie: movie, useCase: useCase)
+
+        return AnyView(MoviesDetailView(viewModel: viewModel))
+    }
 }
