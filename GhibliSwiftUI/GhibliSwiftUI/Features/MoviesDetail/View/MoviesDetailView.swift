@@ -10,7 +10,7 @@ import SwiftUI
 struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
     
     @StateObject private var viewModel: ViewModel
-
+    
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel())
     }
@@ -22,13 +22,27 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
                 //1 banner image
                 ImageView(urlPath: viewModel.movie.bannerImage)
                     .frame(height: 250)
+                    .containerRelativeFrame(.horizontal)
                 
-                
-                // 2 title
-                Text(viewModel.movie.title)
-                    .font(.title)
-                    .fontWeight(.bold)
+                VStack(alignment: .leading, spacing: 8) {
+                    
+                    // 2 title
+                    Text(viewModel.movie.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    // 3 details
+                    Grid(alignment: .leading) {
+                        MovieInfoView(title: "Director:", value: viewModel.movie.director)
+                        MovieInfoView(title: "Producer:", value: viewModel.movie.producer)
+                        MovieInfoView(title: "Release Date:", value: viewModel.movie.releaseDate)
+                        MovieInfoView(title: "Running Time:", value: "\(viewModel.movie.duration) minutes")
+                        MovieInfoView(title: "Score:", value: "\(viewModel.movie.score)/100")
+                    }
+                }
+                .padding()
             }
         }
     }
+    
 }
