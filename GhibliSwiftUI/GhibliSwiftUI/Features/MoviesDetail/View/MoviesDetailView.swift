@@ -39,6 +39,16 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
                         MovieInfoView(title: "Running Time:", value: "\(viewModel.movie.duration) minutes")
                         MovieInfoView(title: "Score:", value: "\(viewModel.movie.score)/100")
                     }
+                    .padding(.vertical, 8)
+                    
+                    Divider()
+                    
+                    // 4 description
+                    Text("Description")
+                        .font(.headline)
+                    
+                    Text(viewModel.movie.description)
+                    
                 }
                 .padding()
             }
