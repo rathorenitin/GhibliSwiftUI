@@ -18,9 +18,10 @@ struct MovieDTO: Decodable {
     let bannerImage: String
     let score: String
     let duration: String
+    let people: [String]
     
     enum CodingKeys: String, CodingKey {
-        case id, title, description, director, producer, release_date, image
+        case id, title, description, director, producer, release_date, image, people
         case bannerImage = "movie_banner"
         case duration = "running_time"
         case score = "rt_score"
@@ -36,6 +37,7 @@ struct MovieDTO: Decodable {
               image: image,
               bannerImage: bannerImage,
               score: score,
-              duration: duration)
+              duration: duration,
+              people: people)
     }
 }

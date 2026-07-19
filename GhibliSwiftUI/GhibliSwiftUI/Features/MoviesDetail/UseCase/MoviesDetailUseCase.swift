@@ -6,6 +6,7 @@
 //
 
 protocol MoviesDetailUseCaseProtocol {
+    func fetchCharacters(from URLString: String) async throws -> Characters
 }
 
 final class MoviesDetailUseCase: MoviesDetailUseCaseProtocol {
@@ -13,5 +14,9 @@ final class MoviesDetailUseCase: MoviesDetailUseCaseProtocol {
 
     init(repository: MoviesDetailRepositoryProtocol) {
         self.repository = repository
+    }
+    
+    func fetchCharacters(from URLString: String) async throws -> Characters {
+        try await repository.fetchCharacters(rom: URLString)
     }
 }

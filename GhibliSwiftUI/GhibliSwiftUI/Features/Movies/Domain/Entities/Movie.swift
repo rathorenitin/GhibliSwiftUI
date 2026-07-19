@@ -18,4 +18,5 @@ struct Movie: Identifiable, Equatable, Hashable {
     let bannerImage: String
     let score: String
     let duration: String
+    let people: [String]
 }

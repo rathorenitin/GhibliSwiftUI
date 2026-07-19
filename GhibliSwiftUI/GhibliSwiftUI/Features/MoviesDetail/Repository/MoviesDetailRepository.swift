@@ -6,6 +6,7 @@
 //
 
 protocol MoviesDetailRepositoryProtocol {
+    func fetchCharacters(rom URLString: String) async throws -> Characters
 }
 
 final class MoviesDetailRepository: MoviesDetailRepositoryProtocol {
@@ -14,4 +15,11 @@ final class MoviesDetailRepository: MoviesDetailRepositoryProtocol {
     init(apiClient: ApiClientProtocol) {
         self.apiClient = apiClient
     }
+    
+    func fetchCharacters(rom URLString: String) async throws -> Characters {
+        let request = CharactersRequest(url: URLString)
+        let dtos: CharactersDTO = try await apiClient.executeAsync(request: request)
+        return dtos.toDomain()
+    }
+
 }

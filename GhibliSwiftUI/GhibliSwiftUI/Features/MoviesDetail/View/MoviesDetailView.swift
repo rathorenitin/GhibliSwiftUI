@@ -49,9 +49,39 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
                     
                     Text(viewModel.movie.description)
                     
+                    Divider()
+                    
+                    // 5 Characters
+                    characterView
                 }
                 .padding()
             }
+        }
+        .task {
+            viewModel.load()
+        }
+    }
+    
+    @ViewBuilder
+    private var characterView: some View {
+        switch viewModel.state {
+        case .loading:
+            LoadingView()
+        case .loaded(let characters):
+            Text("Characters")
+                .font(.headline)
+            
+            ForEach(characters) { character in
+                Text(character.name)
+            }
+        case .empty(let message):
+            EmptyStateView(message: message)
+        case .error(let message):
+            ErrorView(message: message,
+                      retry: {
+                viewModel.load()
+            })
+
         }
     }
     
