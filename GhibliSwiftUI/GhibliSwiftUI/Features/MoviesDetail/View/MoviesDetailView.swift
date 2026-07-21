@@ -64,15 +64,34 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
     
     @ViewBuilder
     private var characterView: some View {
+        Text("Characters")
+            .font(.headline)
+        
         switch viewModel.state {
         case .loading:
             LoadingView()
         case .loaded(let characters):
-            Text("Characters")
-                .font(.headline)
-            
             ForEach(characters) { character in
-                Text(character.name)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(character.name)
+                    
+                    HStack(spacing: 8) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 8) {
+                                Label(character.gender, systemImage: "person.fill")
+                                Text("Age: \(character.age)")
+                            }
+                            HStack(spacing: 8) {
+                                Label(character.eyeColor, systemImage: "eye")
+                                Text("Hair: \(character.hairColor)")
+                            }
+                        }
+                    }
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+                    .lineLimit(1)
+                }
             }
         case .empty(let message):
             EmptyStateView(message: message)

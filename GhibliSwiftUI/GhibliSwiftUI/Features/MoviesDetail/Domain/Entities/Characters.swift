@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct Characters: Identifiable {
     let id: String
     let name: String
