@@ -72,26 +72,7 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
             LoadingView()
         case .loaded(let characters):
             ForEach(characters) { character in
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(character.name)
-                    
-                    HStack(spacing: 8) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack(spacing: 8) {
-                                Label(character.gender, systemImage: "person.fill")
-                                Text("Age: \(character.age)")
-                            }
-                            HStack(spacing: 8) {
-                                Label(character.eyeColor, systemImage: "eye")
-                                Text("Hair: \(character.hairColor)")
-                            }
-                        }
-                    }
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                    .lineLimit(1)
-                }
+                CharacterView(character: character)
             }
         case .empty(let message):
             EmptyStateView(message: message)
