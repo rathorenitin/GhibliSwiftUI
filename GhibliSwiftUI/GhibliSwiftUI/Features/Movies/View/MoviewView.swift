@@ -21,10 +21,19 @@ struct MoviewView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(model.title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
+                HStack {
+                    Text(model.title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .lineLimit(2)
+                    
+                    Spacer()
+                    
+                    FavoriteButton(isFavroite: true) { isFavorite in
+                        
+                    }
+                }
+                
 
                 if !model.director.isEmpty {
                     Text("Director: \(model.director)")

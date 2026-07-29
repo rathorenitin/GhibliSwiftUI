@@ -57,6 +57,11 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
                 .padding()
             }
         }
+        .toolbar(content: {
+            FavoriteButton(isFavroite: true) { isFavroite in
+                
+            }
+        })
         .task {
             viewModel.load()
         }
