@@ -11,17 +11,23 @@ import Combine
 protocol MoviesDetailViewModelProtocol: ObservableObject {
     var movie: Movie { get }
     var state: ViewState<[Characters]> { get }
+    var isFavorite: Bool { get }
     func load()
+    func toggleFavorite()
 }
 
 final class MoviesDetailViewModel: ObservableObject, MoviesDetailViewModelProtocol {
     @Published var movie: Movie
     @Published private(set) var state: ViewState<[Characters]> = .loading
+    @Published private(set) var isFavorite: Bool
     
     private let useCase: MoviesDetailUseCaseProtocol
-    init(movie: Movie, useCase: MoviesDetailUseCaseProtocol) {
+    private let favoritesUseCase: FavoritesUseCaseProtocol
+    init(movie: Movie, useCase: MoviesDetailUseCaseProtocol, favoritesUseCase: FavoritesUseCaseProtocol) {
         self.movie = movie
         self.useCase = useCase
+        self.favoritesUseCase = favoritesUseCase
+        self.isFavorite = favoritesUseCase.isFavorite(movieID: movie.id)
     }
     
     func load() {
@@ -49,5 +55,11 @@ final class MoviesDetailViewModel: ObservableObject, MoviesDetailViewModelProtoc
                 self.state = .error("Failed to load movies: \(error)")
             }
         }
+    }
+
+    func toggleFavorite() {
+        let nextValue = !isFavorite
+        favoritesUseCase.toggleFavorite(movieID: movie.id, isFavorite: nextValue)
+        isFavorite = nextValue
     }
 }

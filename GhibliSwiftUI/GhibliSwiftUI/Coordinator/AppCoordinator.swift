@@ -19,7 +19,10 @@ final class AppCoordinator: ObservableObject, Coordinator {
         let apiClient = ApiClient()
         let repository = MoviesListRepository(apiClient: apiClient)
         let useCase = MoviesListUseCase(repository: repository)
-        let viewModel = MoviesListViewModel(useCase: useCase)
+
+        let favoritesRepository = FavoritesRepository(localStorage: FavoritesLocalStorage())
+        let favoritesUseCase = FavoritesUseCase(repository: favoritesRepository)
+        let viewModel = MoviesListViewModel(useCase: useCase, favoritesUseCase: favoritesUseCase)
 
         return AnyView(MoviesListView(viewModel: viewModel))
     }
@@ -29,7 +32,9 @@ final class AppCoordinator: ObservableObject, Coordinator {
         let apiClient = ApiClient()
         let repository = MoviesDetailRepository(apiClient: apiClient)
         let useCase = MoviesDetailUseCase(repository: repository)
-        let viewModel = MoviesDetailViewModel(movie: movie, useCase: useCase)
+        let favoritesRepository = FavoritesRepository(localStorage: FavoritesLocalStorage())
+        let favoritesUseCase = FavoritesUseCase(repository: favoritesRepository)
+        let viewModel = MoviesDetailViewModel(movie: movie, useCase: useCase, favoritesUseCase: favoritesUseCase)
 
         return AnyView(MoviesDetailView(viewModel: viewModel))
     }

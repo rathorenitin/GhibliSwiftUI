@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
     @StateObject private var viewModel: ViewModel
+    @State private var selectedMovie: Movie?
 
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel())
@@ -19,7 +20,7 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
             contentView
                 .navigationTitle("Movies")
                 .onAppear { viewModel.load() }
-                .navigationDestination(for: Movie.self) { movie in
+                .navigationDestination(item: $selectedMovie) { movie in
                     AppCoordinator().movieDetail(movie: movie)
                 }
         }
@@ -33,9 +34,7 @@ struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
 
         case .loaded(let movies):
             List(movies) { movie in
-                NavigationLink(value: movie) {
-                    MoviewView(model: movie)
-                }
+                MoviewView(model: movie, viewModel: viewModel) { selectedMovie = $0 }
             }
 
         case .empty(let message):

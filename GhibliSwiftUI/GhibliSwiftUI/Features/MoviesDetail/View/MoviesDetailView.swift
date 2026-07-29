@@ -58,8 +58,8 @@ struct MoviesDetailView<ViewModel: MoviesDetailViewModelProtocol>: View  {
             }
         }
         .toolbar(content: {
-            FavoriteButton(isFavroite: true) { isFavroite in
-                
+            FavoriteButton(isFavroite: viewModel.isFavorite) { _ in
+                viewModel.toggleFavorite()
             }
         })
         .task {
