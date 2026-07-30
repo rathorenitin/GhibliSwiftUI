@@ -17,14 +17,28 @@ final class AppCoordinator: ObservableObject, Coordinator {
 
     func start() -> AnyView {
         let apiClient = ApiClient()
-        let repository = MoviesListRepository(apiClient: apiClient)
-        let useCase = MoviesListUseCase(repository: repository)
+        let moviesRepository = MoviesListRepository(apiClient: apiClient)
+        let moviesUseCase = MoviesListUseCase(repository: moviesRepository)
 
         let favoritesRepository = FavoritesRepository(localStorage: FavoritesLocalStorage())
         let favoritesUseCase = FavoritesUseCase(repository: favoritesRepository)
-        let viewModel = MoviesListViewModel(useCase: useCase, favoritesUseCase: favoritesUseCase)
 
-        return AnyView(MoviesListView(viewModel: viewModel))
+        let moviesViewModel = MoviesListViewModel(useCase: moviesUseCase, favoritesUseCase: favoritesUseCase)
+        let favoritesViewModel = FavoritesViewModel(useCase: moviesUseCase, favoritesUseCase: favoritesUseCase)
+
+        return AnyView(
+            TabView {
+                MoviesListView(viewModel: moviesViewModel)
+                    .tabItem {
+                        Label("Movies", systemImage: "film")
+                    }
+
+                FavoritesView(viewModel: favoritesViewModel)
+                    .tabItem {
+                        Label("Favorites", systemImage: "heart.fill")
+                    }
+            }
+        )
     }
 
 

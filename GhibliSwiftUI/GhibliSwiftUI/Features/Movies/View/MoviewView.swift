@@ -7,9 +7,14 @@
 
 import SwiftUI
 
-struct MoviewView: View {
+protocol FavoriteToggleViewModelProtocol: ObservableObject {
+    func isFavorite(movieID: String) -> Bool
+    func toggleFavorite(movieID: String)
+}
+
+struct MoviewView<ViewModel: FavoriteToggleViewModelProtocol>: View {
     let model: Movie
-    let viewModel: MoviesListViewModelProtocol
+    let viewModel: ViewModel
     let onSelect: (Movie) -> Void
 
     private var hasMetadata: Bool {

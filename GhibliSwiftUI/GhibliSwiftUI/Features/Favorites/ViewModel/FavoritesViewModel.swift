@@ -1,20 +1,20 @@
 //
-//  MoviesListViewModel.swift
+//  FavoritesViewModel.swift
 //  GhibliSwiftUI
 //
-//  Created by Nitin Singh Rathore on 28/06/26.
+//  Created by Nitin Singh Rathore on 30/07/26.
 //
 
-import Combine
 import Foundation
+import Combine
 
-protocol MoviesListViewModelProtocol: ObservableObject, FavoriteToggleViewModelProtocol {
+protocol FavoritesViewModelProtocol: ObservableObject, FavoriteToggleViewModelProtocol {
     var state: ViewState<[Movie]> { get }
     var favoriteIDs: Set<String> { get }
     func load()
 }
 
-final class MoviesListViewModel: ObservableObject, MoviesListViewModelProtocol {
+final class FavoritesViewModel: ObservableObject, FavoritesViewModelProtocol {
     @Published private(set) var state: ViewState<[Movie]> = .loading
     @Published private(set) var favoriteIDs: Set<String> = []
 
@@ -31,12 +31,15 @@ final class MoviesListViewModel: ObservableObject, MoviesListViewModelProtocol {
             self.state = .loading
             do {
                 let result = try await useCase.execute()
-                if result.isEmpty {
-                    self.state = .empty("No movies found")
-                } else {
-                    self.state = .loaded(result)
-                }
                 refreshFavorites()
+
+                let favoriteMovies = result.filter { favoriteIDs.contains($0.id) }
+
+                if favoriteMovies.isEmpty {
+                    self.state = .empty("No favorite movies found")
+                } else {
+                    self.state = .loaded(favoriteMovies)
+                }
             } catch {
                 self.state = .error("Failed to load movies: \(error)")
             }
