@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-protocol FavoriteToggleViewModelProtocol: ObservableObject {
+protocol FavoriteToggleViewModelProtocol {
     func isFavorite(movieID: String) -> Bool
     func toggleFavorite(movieID: String)
 }

@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import Combine
 
-protocol Coordinator: ObservableObject {
+protocol Coordinator {
     func start() -> AnyView
 }
 
-final class AppCoordinator: ObservableObject, Coordinator {
-    let objectWillChange = ObservableObjectPublisher()
+@Observable
+final class AppCoordinator: Coordinator {
 
     func start() -> AnyView {
         let apiClient = ApiClient()

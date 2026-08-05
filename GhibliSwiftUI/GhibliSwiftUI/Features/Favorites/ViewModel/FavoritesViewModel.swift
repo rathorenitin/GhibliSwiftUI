@@ -6,17 +6,17 @@
 //
 
 import Foundation
-import Combine
 
-protocol FavoritesViewModelProtocol: ObservableObject, FavoriteToggleViewModelProtocol {
+protocol FavoritesViewModelProtocol: FavoriteToggleViewModelProtocol {
     var state: ViewState<[Movie]> { get }
     var favoriteIDs: Set<String> { get }
     func load()
 }
 
-final class FavoritesViewModel: ObservableObject, FavoritesViewModelProtocol {
-    @Published private(set) var state: ViewState<[Movie]> = .loading
-    @Published private(set) var favoriteIDs: Set<String> = []
+@Observable
+final class FavoritesViewModel: FavoritesViewModelProtocol {
+    var state: ViewState<[Movie]> = .loading
+    var favoriteIDs: Set<String> = []
 
     private let useCase: MoviesListUseCaseProtocol
     private let favoritesUseCase: FavoritesUseCaseProtocol

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct MoviesListView<ViewModel: MoviesListViewModelProtocol>: View {
-    @StateObject private var viewModel: ViewModel
+    @State private var viewModel: ViewModel
     @State private var selectedMovie: Movie?
 
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel())
+        _viewModel = State(initialValue: viewModel())
     }
 
     var body: some View {

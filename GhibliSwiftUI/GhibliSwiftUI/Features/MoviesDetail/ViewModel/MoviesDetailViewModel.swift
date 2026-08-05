@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import Combine
 
-protocol MoviesDetailViewModelProtocol: ObservableObject {
+protocol MoviesDetailViewModelProtocol {
     var movie: Movie { get }
     var state: ViewState<[Characters]> { get }
     var isFavorite: Bool { get }
@@ -16,10 +15,11 @@ protocol MoviesDetailViewModelProtocol: ObservableObject {
     func toggleFavorite()
 }
 
-final class MoviesDetailViewModel: ObservableObject, MoviesDetailViewModelProtocol {
-    @Published var movie: Movie
-    @Published private(set) var state: ViewState<[Characters]> = .loading
-    @Published private(set) var isFavorite: Bool
+@Observable
+final class MoviesDetailViewModel: MoviesDetailViewModelProtocol {
+    var movie: Movie
+    var state: ViewState<[Characters]> = .loading
+    var isFavorite: Bool
     
     private let useCase: MoviesDetailUseCaseProtocol
     private let favoritesUseCase: FavoritesUseCaseProtocol
