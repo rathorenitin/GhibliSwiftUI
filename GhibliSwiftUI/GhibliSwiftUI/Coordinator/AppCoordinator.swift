@@ -24,20 +24,9 @@ final class AppCoordinator: Coordinator {
 
         let moviesViewModel = MoviesListViewModel(useCase: moviesUseCase, favoritesUseCase: favoritesUseCase)
         let favoritesViewModel = FavoritesViewModel(useCase: moviesUseCase, favoritesUseCase: favoritesUseCase)
+        let tabBarController = TabBarController(moviesViewModel: moviesViewModel, favoritesViewModel: favoritesViewModel)
 
-        return AnyView(
-            TabView {
-                MoviesListView(viewModel: moviesViewModel)
-                    .tabItem {
-                        Label("Movies", systemImage: "film")
-                    }
-
-                FavoritesView(viewModel: favoritesViewModel)
-                    .tabItem {
-                        Label("Favorites", systemImage: "heart.fill")
-                    }
-            }
-        )
+        return tabBarController.start()
     }
 
 
