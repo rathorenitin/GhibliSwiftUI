@@ -17,6 +17,8 @@ protocol FavoritesViewModelProtocol: FavoriteToggleViewModelProtocol {
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     var state: ViewState<[Movie]> = .loading
     var favoriteIDs: Set<String> = []
+    private var allMovies: [Movie] = []
+    private var favoriteMovies: [Movie] = []
 
     private let useCase: MoviesListUseCaseProtocol
     private let favoritesUseCase: FavoritesUseCaseProtocol
@@ -30,10 +32,13 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
         Task {
             self.state = .loading
             do {
-                let result = try await useCase.execute()
-                refreshFavorites()
+                if allMovies.isEmpty {
+                    let result = try await useCase.execute()
+                    allMovies = result
+                }
 
-                let favoriteMovies = result.filter { favoriteIDs.contains($0.id) }
+                refreshFavorites()
+                favoriteMovies = allMovies.filter { favoriteIDs.contains($0.id) }
 
                 if favoriteMovies.isEmpty {
                     self.state = .empty("No favorite movies found")
@@ -54,6 +59,8 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
         let isFavorite = favoriteIDs.contains(movieID)
         favoritesUseCase.toggleFavorite(movieID: movieID, isFavorite: !isFavorite)
         refreshFavorites()
+        favoriteMovies = allMovies.filter { favoriteIDs.contains($0.id) }
+        self.state = favoriteMovies.isEmpty ? .empty("No favorite movies found") : .loaded(favoriteMovies)
     }
 
     private func refreshFavorites() {

@@ -18,7 +18,7 @@ struct FavoritesView<ViewModel: FavoritesViewModelProtocol>: View {
     var body: some View {
         NavigationStack {
             contentView
-                .navigationTitle("Movies")
+                .navigationTitle("Favorites")
                 .onAppear { viewModel.load() }
                 .navigationDestination(item: $selectedMovie) { movie in
                     AppCoordinator().movieDetail(movie: movie)

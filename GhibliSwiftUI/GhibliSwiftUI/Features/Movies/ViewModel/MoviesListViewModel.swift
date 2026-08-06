@@ -17,6 +17,7 @@ protocol MoviesListViewModelProtocol: FavoriteToggleViewModelProtocol {
 final class MoviesListViewModel: MoviesListViewModelProtocol {
     var state: ViewState<[Movie]> = .loading
     var favoriteIDs: Set<String> = []
+    private(set) var cachedMovies: [Movie] = []
 
     private let useCase: MoviesListUseCaseProtocol
     private let favoritesUseCase: FavoritesUseCaseProtocol
@@ -28,9 +29,17 @@ final class MoviesListViewModel: MoviesListViewModelProtocol {
 
     func load() {
         Task {
+            if !cachedMovies.isEmpty {
+                self.state = .loaded(cachedMovies)
+                refreshFavorites()
+                return
+            }
+
             self.state = .loading
             do {
                 let result = try await useCase.execute()
+                cachedMovies = result
+
                 if result.isEmpty {
                     self.state = .empty("No movies found")
                 } else {
